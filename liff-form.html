@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ฟอร์มบันทึกการใช้บุหรี่ไฟฟ้า</title>
+</head>
+<body>
+  <h2>วันนี้คุณใช้บุหรี่ไฟฟ้าหรือไม่?</h2>
+  <form id="form">
+    <label>เลือก:</label><br>
+    <input type="radio" name="used" value="Yes"> ✅ ใช้<br>
+    <input type="radio" name="used" value="No"> ❌ ไม่ใช้<br><br>
+
+    <label>เหตุการณ์ที่เกี่ยวข้อง:</label><br>
+    <input name="reason" placeholder="เช่น ถูกเพื่อนชวน / เครียด"><br><br>
+
+    <label>อารมณ์ตอนนั้น:</label><br>
+    <select name="feeling">
+      <option value="ดีใจ">ดีใจ</option>
+      <option value="เครียด">เครียด</option>
+      <option value="เฉยๆ">เฉยๆ</option>
+    </select><br><br>
+
+    <label>สถานที่:</label><br>
+    <input name="location" placeholder="เช่น โรงเรียน / บ้าน / ร้านน้ำชา"><br><br>
+
+    <button type="submit">ส่งข้อมูล</button>
+  </form>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    liff.init({ liffId: "YOUR_LIFF_ID" }).then(() => {
+      document.getElementById("form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {
+          userId: liff.getContext().userId,
+          used: formData.get("used"),
+          reason: formData.get("reason"),
+          feeling: formData.get("feeling"),
+          location: formData.get("location"),
+          event: "กรอกแบบฟอร์ม"
+        };
+        fetch("https://script.google.com/macros/s/AKfycbzOvY6GDfK8hr6OC0KcIjVmF9uhFZjEQQspjHq8EO5i2tC90Wfe2Z6ridBDznltqvKQmQ/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        }).then(() => {
+          alert("บันทึกข้อมูลเรียบร้อยแล้วค่ะ ขอบคุณที่ร่วมโปรแกรมกับพี่กำกับ!");
+          liff.closeWindow();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+Add liff-form.html
